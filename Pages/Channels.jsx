@@ -3,9 +3,8 @@ import { Channel } from '@/entities/all';
 import { motion } from 'framer-motion';
 import { Button } from "@/components/ui/button";
 import { Radio, Plus, RefreshCw } from "lucide-react";
-
-import ChannelCard from '../components/channels/ChannelCard';
-import WinRateConfig from '../components/channels/WinRateConfig';
+import ChannelCard from "../Components/channels/ChannelCard";
+import WinRateConfig from "../Components/channels/WinRateConfig";
 
 export default function Channels() {
   const [channels, setChannels] = useState([]);
@@ -44,13 +43,13 @@ export default function Channels() {
         ...config,
         last_evaluation: new Date().toISOString()
       });
-      
+
       // Check if channel should be auto-disabled
       const channel = channels.find(c => c.id === channelId);
       if (config.auto_disable_enabled && channel) {
         const hasEnoughTrades = (channel.total_trades || 0) >= config.min_trades_for_evaluation;
         const winRate = channel.win_rate || 0;
-        
+
         if (hasEnoughTrades && winRate < config.win_rate_threshold) {
           await Channel.update(channelId, {
             is_active: false,
@@ -58,7 +57,7 @@ export default function Channels() {
           });
         }
       }
-      
+
       loadChannels();
       setConfiguring(null);
       setConfiguringType(null);

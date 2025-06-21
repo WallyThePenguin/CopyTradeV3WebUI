@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Trade, Position } from '@/entities/all';
 import { motion } from 'framer-motion';
@@ -10,7 +9,7 @@ import { LineChart, Line, AreaChart, Area, BarChart, Bar, XAxis, YAxis, Cartesia
 import { Activity, TrendingUp, Calendar, RefreshCw, Users, Target, Award, TrendingDown as TrendingDownIcon, ArrowUp, ArrowDown } from "lucide-react";
 import { format, subDays, startOfDay } from "date-fns";
 
-import TraderAnalytics from '../components/analytics/TraderAnalytics';
+import TraderAnalytics from "../Components/analytics/TraderAnalytics";
 
 export default function Analytics() {
   const [trades, setTrades] = useState([]);
@@ -30,7 +29,7 @@ export default function Analytics() {
         Trade.list('-created_date', 500),
         Position.list('-created_date')
       ]);
-      
+
       setTrades(tradesData || []);
       setPositions(positionsData || []);
     } catch (error) {
@@ -50,7 +49,7 @@ export default function Analytics() {
   const getPnLOverTime = () => {
     const filteredTrades = getFilteredTrades();
     const daily = {};
-    
+
     filteredTrades.forEach(trade => {
       if (trade.status === 'EXECUTED' && trade.pnl !== undefined) {
         const date = format(new Date(trade.created_date), 'MMM dd');
@@ -67,7 +66,7 @@ export default function Analytics() {
   const getTradeVolumeData = () => {
     const filteredTrades = getFilteredTrades();
     const daily = {};
-    
+
     filteredTrades.forEach(trade => {
       const date = format(new Date(trade.created_date), 'MMM dd');
       daily[date] = (daily[date] || 0) + 1;
@@ -95,13 +94,13 @@ export default function Analytics() {
 
   const getChannelPerformance = () => {
     const channelStats = {};
-    
+
     trades.forEach(trade => {
       const channel = trade.channel || 'Unknown';
       if (!channelStats[channel]) {
         channelStats[channel] = { wins: 0, losses: 0, total: 0, pnl: 0 };
       }
-      
+
       channelStats[channel].total += 1;
       if (trade.pnl !== undefined) {
         if (trade.pnl > 0) channelStats[channel].wins += 1;
@@ -118,7 +117,7 @@ export default function Analytics() {
       trades: stats.total
     }));
   };
-  
+
   const getAdvancedOverviewStats = () => {
     const filteredTrades = getFilteredTrades().filter(t => t.status === 'EXECUTED' && t.pnl !== null && t.pnl !== undefined);
 
@@ -132,20 +131,20 @@ export default function Analytics() {
 
     const symbolPerformance = {};
     filteredTrades.forEach(trade => {
-        symbolPerformance[trade.symbol] = (symbolPerformance[trade.symbol] || 0) + trade.pnl;
+      symbolPerformance[trade.symbol] = (symbolPerformance[trade.symbol] || 0) + trade.pnl;
     });
 
     const sortedSymbols = Object.entries(symbolPerformance)
-        .sort(([, pnlA], [, pnlB]) => pnlB - pnlA);
+      .sort(([, pnlA], [, pnlB]) => pnlB - pnlA);
 
     return {
-        totalWins: winningTrades.length,
-        totalLosses: losingTrades.length,
-        avgWin: winningTrades.length > 0 ? grossProfit / winningTrades.length : 0,
-        avgLoss: losingTrades.length > 0 ? grossLoss / losingTrades.length : 0,
-        profitFactor: profitFactor,
-        topSymbols: sortedSymbols.slice(0, 5),
-        worstSymbols: sortedSymbols.slice(-5).reverse(),
+      totalWins: winningTrades.length,
+      totalLosses: losingTrades.length,
+      avgWin: winningTrades.length > 0 ? grossProfit / winningTrades.length : 0,
+      avgLoss: losingTrades.length > 0 ? grossLoss / losingTrades.length : 0,
+      profitFactor: profitFactor,
+      topSymbols: sortedSymbols.slice(0, 5),
+      worstSymbols: sortedSymbols.slice(-5).reverse(),
     };
   };
 
@@ -190,15 +189,15 @@ export default function Analytics() {
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
         <TabsList className="grid w-full grid-cols-2 lg:w-96 bg-white/10 border border-white/20">
-          <TabsTrigger 
-            value="overview" 
+          <TabsTrigger
+            value="overview"
             className="data-[state=active]:bg-blue-600 text-white"
           >
             <Activity className="w-4 h-4 mr-2" />
             Overview
           </TabsTrigger>
-          <TabsTrigger 
-            value="traders" 
+          <TabsTrigger
+            value="traders"
             className="data-[state=active]:bg-blue-600 text-white"
           >
             <Users className="w-4 h-4 mr-2" />
@@ -211,38 +210,38 @@ export default function Analytics() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <Card className="glass border-white/20">
               <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-gray-400">Profit Factor</CardTitle>
+                <CardTitle className="text-sm font-medium text-gray-400">Profit Factor</CardTitle>
               </CardHeader>
               <CardContent>
-                  <p className="text-3xl font-bold text-blue-400">{isFinite(advancedStats.profitFactor) ? advancedStats.profitFactor.toFixed(2) : '∞'}</p>
-                  <p className="text-xs text-gray-500">Gross Profit / Gross Loss</p>
+                <p className="text-3xl font-bold text-blue-400">{isFinite(advancedStats.profitFactor) ? advancedStats.profitFactor.toFixed(2) : '∞'}</p>
+                <p className="text-xs text-gray-500">Gross Profit / Gross Loss</p>
               </CardContent>
             </Card>
             <Card className="glass border-white/20">
               <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-gray-400">Avg. Winning Trade</CardTitle>
+                <CardTitle className="text-sm font-medium text-gray-400">Avg. Winning Trade</CardTitle>
               </CardHeader>
               <CardContent>
-                  <p className="text-3xl font-bold text-green-400">${advancedStats.avgWin.toFixed(2)}</p>
-                  <p className="text-xs text-gray-500">From {advancedStats.totalWins} trades</p>
+                <p className="text-3xl font-bold text-green-400">${advancedStats.avgWin.toFixed(2)}</p>
+                <p className="text-xs text-gray-500">From {advancedStats.totalWins} trades</p>
               </CardContent>
             </Card>
             <Card className="glass border-white/20">
               <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-gray-400">Avg. Losing Trade</CardTitle>
+                <CardTitle className="text-sm font-medium text-gray-400">Avg. Losing Trade</CardTitle>
               </CardHeader>
               <CardContent>
-                  <p className="text-3xl font-bold text-red-400">${advancedStats.avgLoss.toFixed(2)}</p>
-                  <p className="text-xs text-gray-500">From {advancedStats.totalLosses} trades</p>
+                <p className="text-3xl font-bold text-red-400">${advancedStats.avgLoss.toFixed(2)}</p>
+                <p className="text-xs text-gray-500">From {advancedStats.totalLosses} trades</p>
               </CardContent>
             </Card>
             <Card className="glass border-white/20">
               <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-gray-400">Win / Loss Count</CardTitle>
+                <CardTitle className="text-sm font-medium text-gray-400">Win / Loss Count</CardTitle>
               </CardHeader>
               <CardContent>
-                  <p className="text-3xl font-bold text-white">{advancedStats.totalWins} / {advancedStats.totalLosses}</p>
-                  <p className="text-xs text-gray-500">Total winning vs losing trades</p>
+                <p className="text-3xl font-bold text-white">{advancedStats.totalWins} / {advancedStats.totalLosses}</p>
+                <p className="text-xs text-gray-500">Total winning vs losing trades</p>
               </CardContent>
             </Card>
           </div>
@@ -261,16 +260,16 @@ export default function Analytics() {
                   <AreaChart data={pnlData}>
                     <defs>
                       <linearGradient id="pnlGradient" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3}/>
-                        <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
+                        <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3} />
+                        <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
                       </linearGradient>
                     </defs>
                     <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
                     <XAxis dataKey="date" stroke="#9ca3af" />
                     <YAxis stroke="#9ca3af" />
-                    <Tooltip 
-                      contentStyle={{ 
-                        backgroundColor: 'rgba(15, 23, 42, 0.9)', 
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: 'rgba(15, 23, 42, 0.9)',
                         border: '1px solid rgba(255, 255, 255, 0.2)',
                         borderRadius: '8px'
                       }}
@@ -304,9 +303,9 @@ export default function Analytics() {
                       <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
                       <XAxis dataKey="date" stroke="#9ca3af" />
                       <YAxis stroke="#9ca3af" />
-                      <Tooltip 
-                        contentStyle={{ 
-                          backgroundColor: 'rgba(15, 23, 42, 0.9)', 
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: 'rgba(15, 23, 42, 0.9)',
                           border: '1px solid rgba(255, 255, 255, 0.2)',
                           borderRadius: '8px'
                         }}
@@ -343,9 +342,9 @@ export default function Analytics() {
                           <Cell key={`cell-${index}`} fill={entry.color} />
                         ))}
                       </Pie>
-                      <Tooltip 
-                        contentStyle={{ 
-                          backgroundColor: 'rgba(15, 23, 42, 0.9)', 
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: 'rgba(15, 23, 42, 0.9)',
                           border: '1px solid rgba(255, 255, 255, 0.2)',
                           borderRadius: '8px'
                         }}
@@ -355,38 +354,38 @@ export default function Analytics() {
                 </div>
               </CardContent>
             </Card>
-            
+
             {/* Win/Loss Ratio */}
             <Card className="glass border-white/20">
               <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-white">
-                      <Target className="w-5 h-5" />
-                      Win / Loss Ratio
-                  </CardTitle>
+                <CardTitle className="flex items-center gap-2 text-white">
+                  <Target className="w-5 h-5" />
+                  Win / Loss Ratio
+                </CardTitle>
               </CardHeader>
               <CardContent>
-                  <div className="h-48">
-                      <ResponsiveContainer width="100%" height="100%">
-                          <BarChart data={[{name: 'Trades', wins: advancedStats.totalWins, losses: advancedStats.totalLosses}]} layout="vertical" barCategoryGap="0%">
-                              <CartesianGrid strokeDasharray="3 3" stroke="#374151" horizontal={false} />
-                              <XAxis type="number" stroke="#9ca3af" />
-                              <YAxis type="category" dataKey="name" hide />
-                              <Tooltip 
-                                contentStyle={{ 
-                                  backgroundColor: 'rgba(15, 23, 42, 0.9)', 
-                                  border: '1px solid rgba(255, 255, 255, 0.2)',
-                                  borderRadius: '8px'
-                                }}
-                              />
-                              <Bar dataKey="wins" stackId="a" fill="#10b981" />
-                              <Bar dataKey="losses" stackId="a" fill="#ef4444" />
-                          </BarChart>
-                      </ResponsiveContainer>
-                  </div>
+                <div className="h-48">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={[{ name: 'Trades', wins: advancedStats.totalWins, losses: advancedStats.totalLosses }]} layout="vertical" barCategoryGap="0%">
+                      <CartesianGrid strokeDasharray="3 3" stroke="#374151" horizontal={false} />
+                      <XAxis type="number" stroke="#9ca3af" />
+                      <YAxis type="category" dataKey="name" hide />
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                          border: '1px solid rgba(255, 255, 255, 0.2)',
+                          borderRadius: '8px'
+                        }}
+                      />
+                      <Bar dataKey="wins" stackId="a" fill="#10b981" />
+                      <Bar dataKey="losses" stackId="a" fill="#ef4444" />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
               </CardContent>
             </Card>
           </div>
-          
+
           <div className="grid lg:grid-cols-3 gap-6">
             {/* Top 5 Symbols */}
             <Card className="glass border-white/20">
@@ -435,7 +434,7 @@ export default function Analytics() {
                 </ul>
               </CardContent>
             </Card>
-            
+
             {/* Channel Performance (Simplified) */}
             <Card className="glass border-white/20">
               <CardHeader>
@@ -452,7 +451,7 @@ export default function Analytics() {
                     </thead>
                     <tbody>
                       {channelPerformance.length > 0 ? (
-                        channelPerformance.sort((a,b) => parseFloat(b.totalPnL) - parseFloat(a.totalPnL)).map((channel, index) => (
+                        channelPerformance.sort((a, b) => parseFloat(b.totalPnL) - parseFloat(a.totalPnL)).map((channel, index) => (
                           <motion.tr
                             key={channel.channel}
                             initial={{ opacity: 0, y: 10 }}
@@ -461,9 +460,8 @@ export default function Analytics() {
                             className="border-b border-white/5"
                           >
                             <td className="py-2 text-white font-medium">{channel.channel}</td>
-                            <td className={`py-2 text-right font-medium ${
-                              parseFloat(channel.totalPnL) >= 0 ? 'text-green-400' : 'text-red-400'
-                            }`}>
+                            <td className={`py-2 text-right font-medium ${parseFloat(channel.totalPnL) >= 0 ? 'text-green-400' : 'text-red-400'
+                              }`}>
                               ${channel.totalPnL}
                             </td>
                           </motion.tr>

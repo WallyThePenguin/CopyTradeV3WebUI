@@ -1,14 +1,13 @@
-
 import React, { useState, useEffect } from 'react';
 import { Trade, Position, Channel, Signal } from '@/entities/all';
 import { TrendingUp, DollarSign, Target, BarChart3, Sunrise } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { isToday } from 'date-fns';
 
-import StatsCard from '../components/dashboard/StatsCard';
-import LiveMetrics from '../components/dashboard/LiveMetrics';
-import RecentTrades from '../components/dashboard/RecentTrades';
-import ChannelStatus from '../components/dashboard/ChannelStatus';
+import StatsCard from "../Components/dashboard/StatsCard";
+import LiveMetrics from "../Components/dashboard/LiveMetrics";
+import RecentTrades from "../Components/dashboard/RecentTrades";
+import ChannelStatus from "../Components/dashboard/ChannelStatus";
 
 export default function Dashboard() {
   const [trades, setTrades] = useState([]);
@@ -30,7 +29,7 @@ export default function Dashboard() {
         Channel.list(),
         Signal.list('-created_date', 20)
       ]);
-      
+
       setTrades(tradesData || []);
       setPositions(positionsData || []);
       setChannels(channelsData || []);
@@ -43,7 +42,7 @@ export default function Dashboard() {
       setChannels([]);
       setSignals([]);
     }
-    setIsLoading(false);  
+    setIsLoading(false);
   };
 
   const calculateStats = () => {
@@ -54,7 +53,7 @@ export default function Dashboard() {
     const winRate = executedTrades.length > 0 ? (winningTrades.length / executedTrades.length) * 100 : 0;
     const totalPositionValue = positions.reduce((sum, pos) => sum + (pos.market_value || 0), 0);
     const avgPnL = executedTrades.length > 0 ? totalPnL / executedTrades.length : 0;
-    
+
     const todaysTrades = executedTrades.filter(t => t.execution_time && isToday(new Date(t.execution_time)));
     const todaysReturn = todaysTrades.reduce((sum, trade) => sum + (trade.pnl || 0), 0);
 
@@ -72,7 +71,7 @@ export default function Dashboard() {
 
   return (
     <div className="p-6 space-y-6">
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4"
@@ -141,7 +140,7 @@ export default function Dashboard() {
           <LiveMetrics />
           <RecentTrades trades={trades} isLoading={isLoading} />
         </div>
-        
+
         <div className="space-y-6">
           <ChannelStatus channels={channels} isLoading={isLoading} />
         </div>

@@ -23,7 +23,7 @@ export default function WinRateConfig({ channel, onUpdate, onSave, onCancel }) {
   const getPerformanceStatus = () => {
     const hasEnoughTrades = (channel.total_trades || 0) >= config.min_trades_for_evaluation;
     const winRate = channel.win_rate || 0;
-    
+
     if (!hasEnoughTrades) {
       return {
         status: 'pending',
@@ -31,7 +31,7 @@ export default function WinRateConfig({ channel, onUpdate, onSave, onCancel }) {
         color: 'bg-yellow-500/20 text-yellow-300 border-yellow-500/30'
       };
     }
-    
+
     if (winRate >= config.win_rate_threshold) {
       return {
         status: 'good',
@@ -39,7 +39,7 @@ export default function WinRateConfig({ channel, onUpdate, onSave, onCancel }) {
         color: 'bg-green-500/20 text-green-300 border-green-500/30'
       };
     }
-    
+
     return {
       status: 'poor',
       message: `Win rate ${winRate.toFixed(1)}% below ${config.win_rate_threshold}% threshold`,
@@ -67,7 +67,7 @@ export default function WinRateConfig({ channel, onUpdate, onSave, onCancel }) {
               {performanceStatus.status.toUpperCase()}
             </Badge>
           </div>
-          
+
           <div className="grid grid-cols-4 gap-4 mb-3">
             <div className="text-center">
               <p className="text-2xl font-bold text-white">{channel.total_trades || 0}</p>
@@ -80,23 +80,21 @@ export default function WinRateConfig({ channel, onUpdate, onSave, onCancel }) {
               <p className="text-xs text-gray-400">Win Rate</p>
             </div>
             <div className="text-center">
-              <p className={`text-2xl font-bold ${
-                (channel.total_pnl || 0) >= 0 ? 'text-green-400' : 'text-red-400'
-              }`}>
+              <p className={`text-2xl font-bold ${(channel.total_pnl || 0) >= 0 ? 'text-green-400' : 'text-red-400'
+                }`}>
                 ${(channel.total_pnl || 0).toFixed(2)}
               </p>
               <p className="text-xs text-gray-400">Total P&L</p>
             </div>
             <div className="text-center">
-              <p className={`text-2xl font-bold ${
-                avgPnL >= 0 ? 'text-green-400' : 'text-red-400'
-              }`}>
+              <p className={`text-2xl font-bold ${avgPnL >= 0 ? 'text-green-400' : 'text-red-400'
+                }`}>
                 ${avgPnL.toFixed(2)}
               </p>
               <p className="text-xs text-gray-400">Avg P&L</p>
             </div>
           </div>
-          
+
           <Alert>
             <AlertTriangle className="h-4 w-4" />
             <AlertDescription className="text-white">
@@ -116,7 +114,7 @@ export default function WinRateConfig({ channel, onUpdate, onSave, onCancel }) {
             </div>
             <Switch
               checked={config.auto_disable_enabled}
-              onCheckedChange={(checked) => 
+              onCheckedChange={(checked) =>
                 setConfig(prev => ({ ...prev, auto_disable_enabled: checked }))
               }
             />
@@ -130,7 +128,7 @@ export default function WinRateConfig({ channel, onUpdate, onSave, onCancel }) {
                 min="0"
                 max="100"
                 value={config.win_rate_threshold}
-                onChange={(e) => 
+                onChange={(e) =>
                   setConfig(prev => ({ ...prev, win_rate_threshold: parseFloat(e.target.value) }))
                 }
                 className="bg-white/10 border-white/20 text-white"
@@ -147,7 +145,7 @@ export default function WinRateConfig({ channel, onUpdate, onSave, onCancel }) {
                 min="1"
                 max="100"
                 value={config.min_trades_for_evaluation}
-                onChange={(e) => 
+                onChange={(e) =>
                   setConfig(prev => ({ ...prev, min_trades_for_evaluation: parseInt(e.target.value) }))
                 }
                 className="bg-white/10 border-white/20 text-white"
