@@ -1,8 +1,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { Trade, Position, Channel, Signal } from '@/entities/all';
-import { TrendingUp, DollarSign, Target, BarChart3 } from 'lucide-react';
+import { TrendingUp, DollarSign, Target, BarChart3, Sunrise } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { isToday } from 'date-fns';
 
 import StatsCard from '../components/dashboard/StatsCard';
 import LiveMetrics from '../components/dashboard/LiveMetrics';
@@ -53,13 +54,17 @@ export default function Dashboard() {
     const winRate = executedTrades.length > 0 ? (winningTrades.length / executedTrades.length) * 100 : 0;
     const totalPositionValue = positions.reduce((sum, pos) => sum + (pos.market_value || 0), 0);
     const avgPnL = executedTrades.length > 0 ? totalPnL / executedTrades.length : 0;
+    
+    const todaysTrades = executedTrades.filter(t => t.execution_time && isToday(new Date(t.execution_time)));
+    const todaysReturn = todaysTrades.reduce((sum, trade) => sum + (trade.pnl || 0), 0);
 
     return {
       totalTrades,
       totalPnL: totalPnL || 0,
       avgPnL: avgPnL || 0,
       winRate: winRate || 0,
-      totalPositionValue: totalPositionValue || 0
+      totalPositionValue: totalPositionValue || 0,
+      todaysReturn: todaysReturn || 0
     };
   };
 
@@ -79,13 +84,13 @@ export default function Dashboard() {
       </motion.div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
         <StatsCard
-          title="Total Trades"
-          value={stats.totalTrades}
-          change="+12%"
+          title="Portfolio Value"
+          value={`$${stats.totalPositionValue.toFixed(2)}`}
+          change="+5.7%"
           trend="up"
-          icon={TrendingUp}
+          icon={BarChart3}
           color="blue"
         />
         <StatsCard
@@ -97,12 +102,12 @@ export default function Dashboard() {
           color={stats.totalPnL >= 0 ? "green" : "orange"}
         />
         <StatsCard
-          title="Avg P&L"
-          value={`$${stats.avgPnL.toFixed(2)}`}
-          change={stats.avgPnL >= 0 ? "+5.4%" : "-2.8%"}
-          trend={stats.avgPnL >= 0 ? "up" : "down"}
-          icon={Target}
-          color={stats.avgPnL >= 0 ? "green" : "orange"}
+          title="Today's P&L"
+          value={`$${stats.todaysReturn.toFixed(2)}`}
+          change={stats.todaysReturn >= 0 ? "+1.3%" : "-0.5%"}
+          trend={stats.todaysReturn >= 0 ? "up" : "down"}
+          icon={Sunrise}
+          color={stats.todaysReturn >= 0 ? "green" : "orange"}
         />
         <StatsCard
           title="Win Rate"
@@ -113,11 +118,19 @@ export default function Dashboard() {
           color="purple"
         />
         <StatsCard
-          title="Portfolio Value"
-          value={`$${stats.totalPositionValue.toFixed(2)}`}
-          change="+5.7%"
+          title="Avg P&L / Trade"
+          value={`$${stats.avgPnL.toFixed(2)}`}
+          change={stats.avgPnL >= 0 ? "+5.4%" : "-2.8%"}
+          trend={stats.avgPnL >= 0 ? "up" : "down"}
+          icon={Target}
+          color={stats.avgPnL >= 0 ? "green" : "orange"}
+        />
+        <StatsCard
+          title="Total Trades"
+          value={stats.totalTrades}
+          change="+12%"
           trend="up"
-          icon={BarChart3}
+          icon={TrendingUp}
           color="blue"
         />
       </div>

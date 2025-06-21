@@ -18,44 +18,37 @@ CopyTradeV3WebUI is a modern web dashboard for monitoring, analyzing, and config
 Layout.js
 Components/
   analytics/
-    TraderAnalytics.js
+    TraderAnalytics.jsx
   channels/
-    ChannelCard.js
-    WinRateConfig.js
+    ChannelCard.jsx
+    WinRateConfig.jsx
   dashboard/
-    ChannelStatus.js
-    LiveMetrics.js
-    RecentTrades.js
-    StatsCard.js
-Entities/
-  Channel.json
-  MarketEvent.json
-  Position.json
-  Signal.json
-  Trade.json
+    ChannelStatus.jsx
+    LiveMetrics.jsx
+    RecentTrades.jsx
+    StatsCard.jsx
 Pages/
-  Analytics.js
-  Channels.js
-  Dashboard.js
-  Market.js
-  Positions.js
-  Settings.js
-  Trades.js
+  Analytics.jsx
+  Channels.jsx
+  Dashboard.jsx
+  Market.jsx
+  News.jsx
+  Positions.jsx
+  Settings.jsx
+  Trades.jsx
 ```
 
 ## Getting Started
 
-1. **Install dependencies**  
+1. **Install dependencies**
    ```sh
    npm install
    ```
-
-2. **Run the development server**  
+2. **Run the development server**
    ```sh
    npm run dev
    ```
-
-3. **Open in browser**  
+3. **Open in browser**
    Visit [http://localhost:3000](http://localhost:3000) (or the port specified in your setup).
 
 ## Usage
@@ -75,9 +68,8 @@ Pages/
 
 ## Customization
 
-- Entity schemas are defined in [Entities/](Entities/) as JSON files.
-- UI components are modular and can be extended in [Components/](Components/).
-- Pages are located in [Pages/](Pages/).
+- UI components are modular and can be extended in `Components/`.
+- Pages are located in `Pages/`.
 
 ## License
 

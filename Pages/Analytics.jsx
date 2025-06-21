@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Trade, Position } from '@/entities/all';
 import { motion } from 'framer-motion';
