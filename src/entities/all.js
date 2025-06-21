@@ -1,14 +1,26 @@
-// Mock entity classes for demo purposes
+// src/entities/all.js
+
+// Cache to store mock data after first generation
+const mockDataCache = {};
+
 class BaseEntity {
   static async list(sort = '', limit = 50) {
-    // Return mock data based on entity type
     const entityName = this.name;
-    return this.getMockData(entityName, limit);
+
+    // Check if data is already in cache
+    if (!mockDataCache[entityName]) {
+      // Generate a larger dataset once and cache it
+      mockDataCache[entityName] = this.getMockData(entityName, 500);
+    }
+
+    // Return a slice of the cached data
+    // In a real app, sorting would happen here or on the server
+    return mockDataCache[entityName].slice(0, limit);
   }
 
   static async update(id, data) {
-    // Mock update - in real app would update database
     console.log(`Updating ${this.name} ${id}:`, data);
+    // In a real app, you would also update the cache here
     return { id, ...data };
   }
 
@@ -35,7 +47,7 @@ class BaseEntity {
     const symbols = ['AAPL', 'TSLA', 'NVDA', 'MSFT', 'GOOGL', 'AMZN', 'META', 'NFLX'];
     const channels = ['alpha-signals', 'pro-traders', 'market-movers', 'crypto-calls'];
     const traders = ['TradeMaster', 'AlphaWolf', 'MarketGuru', 'CryptoKing', 'StockSage'];
-    
+
     return Array.from({ length: Math.min(limit, 50) }, (_, i) => ({
       id: i + 1,
       symbol: symbols[Math.floor(Math.random() * symbols.length)],
@@ -56,7 +68,7 @@ class BaseEntity {
   static generateMockPositions(limit) {
     const symbols = ['AAPL', 'TSLA', 'NVDA', 'MSFT', 'GOOGL'];
     const channels = ['alpha-signals', 'pro-traders', 'market-movers'];
-    
+
     return Array.from({ length: Math.min(limit, 10) }, (_, i) => ({
       id: i + 1,
       symbol: symbols[i % symbols.length],
@@ -102,7 +114,7 @@ class BaseEntity {
   static generateMockSignals(limit) {
     const symbols = ['AAPL', 'TSLA', 'NVDA', 'MSFT'];
     const channels = ['alpha-signals', 'pro-traders'];
-    
+
     return Array.from({ length: Math.min(limit, 20) }, (_, i) => ({
       id: i + 1,
       symbol: symbols[Math.floor(Math.random() * symbols.length)],
@@ -119,7 +131,7 @@ class BaseEntity {
     const sources = ['Reuters', 'Bloomberg', 'CNBC', 'MarketWatch'];
     const categories = ['MARKET', 'EARNINGS', 'ECONOMIC', 'CRYPTO'];
     const sentiments = ['POSITIVE', 'NEGATIVE', 'NEUTRAL'];
-    
+
     return Array.from({ length: Math.min(limit, 30) }, (_, i) => ({
       id: i + 1,
       title: `Market News Article ${i + 1}`,
@@ -153,9 +165,9 @@ class BaseEntity {
   }
 }
 
-export class Trade extends BaseEntity {}
-export class Position extends BaseEntity {}
-export class Channel extends BaseEntity {}
-export class Signal extends BaseEntity {}
-export class NewsArticle extends BaseEntity {}
-export class MarketEvent extends BaseEntity {}
+export class Trade extends BaseEntity { }
+export class Position extends BaseEntity { }
+export class Channel extends BaseEntity { }
+export class Signal extends BaseEntity { }
+export class NewsArticle extends BaseEntity { }
+export class MarketEvent extends BaseEntity { }

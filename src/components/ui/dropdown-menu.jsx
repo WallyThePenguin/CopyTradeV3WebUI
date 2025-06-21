@@ -1,41 +1,71 @@
-import React from "react";
+import React, { useState, useContext, createContext, useEffect, useRef } from "react";
 import { cn } from "../../utils";
 
+const DropdownMenuContext = createContext(null);
+
 const DropdownMenu = ({ children }) => {
-  return <div className="relative inline-block text-left">{children}</div>;
+  const [isOpen, setIsOpen] = useState(false);
+  return (
+    <DropdownMenuContext.Provider value={{ isOpen, setIsOpen }}>
+      <div className="relative inline-block text-left">{children}</div>
+    </DropdownMenuContext.Provider>
+  );
 };
 
 const DropdownMenuTrigger = ({ asChild, children, ...props }) => {
-  const [isOpen, setIsOpen] = React.useState(false);
-  
+  const { isOpen, setIsOpen } = useContext(DropdownMenuContext);
+  const Comp = asChild ? React.Fragment : "button";
+
   return (
-    <div>
-      {React.cloneElement(children, {
-        onClick: () => setIsOpen(!isOpen),
-        ...props
-      })}
+    <Comp
+      onClick={() => setIsOpen(!isOpen)}
+      {...props}
+    >
+      {children}
+    </Comp>
+  );
+};
+
+const DropdownMenuContent = ({ align = "center", className, children, ...props }) => {
+  const { isOpen, setIsOpen } = useContext(DropdownMenuContext);
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen, setIsOpen]);
+
+  if (!isOpen) return null;
+
+  return (
+    <div
+      ref={menuRef}
+      className={cn(
+        "absolute z-50 min-w-[8rem] overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-md",
+        align === "end" && "right-0",
+        align === "start" && "left-0",
+        className
+      )}
+      {...props}
+    >
+      {children}
     </div>
   );
 };
 
-const DropdownMenuContent = ({ align = "center", className, children, ...props }) => (
-  <div
-    className={cn(
-      "absolute z-50 min-w-[8rem] overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-md",
-      align === "end" && "right-0",
-      align === "start" && "left-0",
-      className
-    )}
-    {...props}
-  >
-    {children}
-  </div>
-);
-
 const DropdownMenuItem = ({ className, children, ...props }) => (
   <div
     className={cn(
-      "relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+      "relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent focus:bg-accent data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
       className
     )}
     {...props}
