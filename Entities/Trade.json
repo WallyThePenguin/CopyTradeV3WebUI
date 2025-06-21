@@ -1,0 +1,90 @@
+{
+  "name": "Trade",
+  "type": "object",
+  "properties": {
+    "symbol": {
+      "type": "string",
+      "description": "Trading symbol (e.g., AAPL, TSLA)"
+    },
+    "action": {
+      "type": "string",
+      "enum": [
+        "BUY",
+        "SELL",
+        "HOLD"
+      ],
+      "description": "Trading action"
+    },
+    "quantity": {
+      "type": "number",
+      "description": "Number of shares/contracts"
+    },
+    "price": {
+      "type": "number",
+      "description": "Execution price"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "STOCK",
+        "OPTION",
+        "CRYPTO"
+      ],
+      "default": "STOCK",
+      "description": "Asset type"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "PENDING",
+        "EXECUTED",
+        "CANCELLED",
+        "FAILED"
+      ],
+      "default": "PENDING",
+      "description": "Trade status"
+    },
+    "channel": {
+      "type": "string",
+      "description": "Discord channel source"
+    },
+    "trader": {
+      "type": "string",
+      "description": "Original trader/source"
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "AI confidence score"
+    },
+    "pnl": {
+      "type": "number",
+      "description": "Profit/Loss amount"
+    },
+    "original_message": {
+      "type": "string",
+      "description": "Original Discord message"
+    },
+    "execution_time": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When trade was executed"
+    },
+    "exit_price": {
+      "type": "number",
+      "description": "Exit price if position closed"
+    },
+    "exit_time": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When position was closed"
+    }
+  },
+  "required": [
+    "symbol",
+    "action",
+    "quantity",
+    "channel"
+  ]
+}

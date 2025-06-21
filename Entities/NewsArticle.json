@@ -1,0 +1,79 @@
+{
+  "name": "NewsArticle",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Article headline"
+    },
+    "summary": {
+      "type": "string",
+      "description": "Brief article summary"
+    },
+    "content": {
+      "type": "string",
+      "description": "Full article content"
+    },
+    "source": {
+      "type": "string",
+      "description": "News source (e.g., Reuters, Bloomberg)"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "MARKET",
+        "EARNINGS",
+        "ECONOMIC",
+        "CRYPTO",
+        "POLITICS",
+        "TECHNOLOGY"
+      ],
+      "description": "News category"
+    },
+    "sentiment": {
+      "type": "string",
+      "enum": [
+        "POSITIVE",
+        "NEGATIVE",
+        "NEUTRAL"
+      ],
+      "default": "NEUTRAL",
+      "description": "Market sentiment impact"
+    },
+    "symbols_mentioned": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Stock symbols mentioned in article"
+    },
+    "url": {
+      "type": "string",
+      "description": "External article URL"
+    },
+    "published_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When article was published"
+    },
+    "image_url": {
+      "type": "string",
+      "description": "Article image URL"
+    },
+    "importance": {
+      "type": "string",
+      "enum": [
+        "LOW",
+        "MEDIUM",
+        "HIGH"
+      ],
+      "default": "MEDIUM",
+      "description": "Market importance level"
+    }
+  },
+  "required": [
+    "title",
+    "source",
+    "category"
+  ]
+}

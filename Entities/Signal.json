@@ -1,0 +1,60 @@
+{
+  "name": "Signal",
+  "type": "object",
+  "properties": {
+    "symbol": {
+      "type": "string",
+      "description": "Trading symbol"
+    },
+    "action": {
+      "type": "string",
+      "enum": [
+        "BUY",
+        "SELL",
+        "HOLD"
+      ],
+      "description": "Recommended action"
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "AI confidence score"
+    },
+    "price_target": {
+      "type": "number",
+      "description": "Target price"
+    },
+    "stop_loss": {
+      "type": "number",
+      "description": "Stop loss price"
+    },
+    "channel": {
+      "type": "string",
+      "description": "Source channel"
+    },
+    "trader": {
+      "type": "string",
+      "description": "Original trader"
+    },
+    "original_message": {
+      "type": "string",
+      "description": "Original message content"
+    },
+    "processed": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether signal was acted upon"
+    },
+    "reasoning": {
+      "type": "string",
+      "description": "AI analysis reasoning"
+    }
+  },
+  "required": [
+    "symbol",
+    "action",
+    "confidence",
+    "channel"
+  ]
+}

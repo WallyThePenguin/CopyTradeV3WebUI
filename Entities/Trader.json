@@ -1,0 +1,90 @@
+{
+  "name": "Trader",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Trader username or handle"
+    },
+    "channel": {
+      "type": "string",
+      "description": "Primary Discord channel"
+    },
+    "total_trades": {
+      "type": "number",
+      "default": 0,
+      "description": "Total number of trades"
+    },
+    "win_rate": {
+      "type": "number",
+      "default": 0,
+      "description": "Win rate percentage"
+    },
+    "total_pnl": {
+      "type": "number",
+      "default": 0,
+      "description": "Total profit/loss"
+    },
+    "avg_pnl": {
+      "type": "number",
+      "default": 0,
+      "description": "Average P&L per trade"
+    },
+    "best_trade": {
+      "type": "number",
+      "default": 0,
+      "description": "Largest winning trade"
+    },
+    "worst_trade": {
+      "type": "number",
+      "default": 0,
+      "description": "Largest losing trade"
+    },
+    "avg_confidence": {
+      "type": "number",
+      "default": 0,
+      "description": "Average AI confidence score"
+    },
+    "sharpe_ratio": {
+      "type": "number",
+      "description": "Risk-adjusted return metric"
+    },
+    "max_drawdown": {
+      "type": "number",
+      "description": "Maximum drawdown percentage"
+    },
+    "consistency_score": {
+      "type": "number",
+      "description": "Trading consistency metric"
+    },
+    "last_active": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last trade timestamp"
+    },
+    "specialty": {
+      "type": "string",
+      "enum": [
+        "STOCKS",
+        "OPTIONS",
+        "CRYPTO",
+        "MIXED"
+      ],
+      "default": "MIXED",
+      "description": "Trading specialty"
+    },
+    "risk_level": {
+      "type": "string",
+      "enum": [
+        "LOW",
+        "MEDIUM",
+        "HIGH"
+      ],
+      "default": "MEDIUM",
+      "description": "Risk assessment"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}
