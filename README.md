@@ -36,6 +36,14 @@ Pages/
   Positions.jsx
   Settings.jsx
   Trades.jsx
+Entities/
+  Channel.json
+  MarketEvent.json
+  NewsArticle.json
+  Position.json
+  Signal.json
+  Trade.json
+  Trader.json
 ```
 
 ## Getting Started
@@ -70,6 +78,7 @@ Pages/
 
 - UI components are modular and can be extended in `Components/`.
 - Pages are located in `Pages/`.
+- Entity schemas are defined in `Entities/` as JSON files.
 
 ## License
 
